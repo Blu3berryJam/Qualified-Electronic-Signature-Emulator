@@ -7,6 +7,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
+import read_key
+
 ENCRYPT_ALGORITHM = algorithms.AES
 KEY_SIZE = 4096
 #BLOCK_SIZE = 0
@@ -64,3 +66,4 @@ def keygen():
 
 if __name__ == '__main__':
     keygen()
+    read_key.read()
