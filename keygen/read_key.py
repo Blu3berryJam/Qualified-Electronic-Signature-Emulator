@@ -8,7 +8,8 @@ def read():
     file_path = filedialog.askopenfilename()
     with open(file_path, "rb") as f:
         file_size = os.path.getsize(file_path)
-        epc = f.read(file_size - IV_SIZE)
+        epk = f.read(file_size - IV_SIZE)
         f.seek(-IV_SIZE, os.SEEK_END)
         iv = f.read(IV_SIZE)
     print("Wybrano plik:", file_path)
+    return epk, iv
