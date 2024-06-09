@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<XAdESSignature>
+  <DocumentInfo>
+    <Size>8700</Size>
+    <Extension>.odt</Extension>
+    <ModificationDate>2024-06-09T19:18:58.780061</ModificationDate>
+  </DocumentInfo>
+  <DocumentHash>VAiZI8ljE9Rt7i6hfLnTgkrPR5C8zsfVvitxqfzQ83Q=</DocumentHash>
+  <Signature>ULfUCMrGulzeiTsT30eeP+VyaO27lkJnepVzLb756RoYcsmkdKLtJ9J6U7lYQWKY5lmLgaWaOFLurl4Ix6KGS2u5oDZGSD4i1Pzy40AdZKT9CKDMsfTpob0v2Dw0owXcdpI1WT4i8pbbIi+cg2gzJSqmXu+oJV83e3tg+7XXwNB0mJVrWej/nTBFM1VMiBalOb9+Bmtd6Ne+3GgtTyhiS8sRk1OHq7ojRPv+X2LkXHdXerpUzY0gmgItEqE6yy2bAeHo/ogOs7Uw0JlSMkeMtMxvDcrA39Z3U30Yk6NILTLocZWAS0xe6Dn3Znr2rfs6GdVJBsdeGPkqmHC7EuptS6JuxHr8lbLrPyZYOV6eIOQsjPgAHjHz0OhDauEKcSlFucfvDQiRCRZrg3CDVGMVCGGJh9vR254xRQk5VWEBIsQhqH6TtPxBdN0eANcVxfANKCFcMXpubEKvjusRGPRYrAvuThGqJtWDzOYc7e+OvadfPhIWUroQ5kgjYN5BvYEhVrDTzin0d9X8NQ/G8zV+83IUHAylbDu2tepcLRJ91Bs3LjvqWBKwiu36bWkcoKXL3wHuo2DPJkoghNfuAj/y+P/qAYRWBQDUaaTynmA15Sdl0oF2RBBeg1X/z/KRnFBqVL0G8OyZ7v/Sje124F/+oe6D0bf18Cz8jKOwEMj8MVw=</Signature>
+  <Timestamp>2024-06-09T19:22:32.659504</Timestamp>
+</XAdESSignature>
