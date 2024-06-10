@@ -6,15 +6,13 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.backends import default_backend
 
-from keygen.read_key import read_public
+from read_key import read_public
 
 
-def verify_signature(document_path, xml_path):
+def verify_signature(document_path, xml_path, public_key):
     with open(document_path, 'rb') as f:
         document_data = f.read()
     document_hash = hashlib.sha256(document_data).digest()
-
-    public_key = read_public()
     tree = ET.parse(xml_path)
     root = tree.getroot()
 
