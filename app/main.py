@@ -1,6 +1,8 @@
 import base64
 import configparser
 import os
+import threading
+
 # import odfpy
 from odf.opendocument import load, OpenDocumentText
 from odf.text import P
@@ -8,6 +10,9 @@ import hashlib
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog, messagebox
+import win32api
+import win32file
+import time
 
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
@@ -23,6 +28,7 @@ from config_reader import load_config
 import verify
 
 ENCRYPT_ALGORITHM, KEY_SIZE, CIPHER_MODE, IV_SIZE = load_config()
+stop_thread = False
 
 
 def generate_rsa_keys():
@@ -162,6 +168,14 @@ def generate_xades_signature(document_path, signature, document_hash):
     return f"Podpisano plik. Podpis zapisano jako {xml_file_path}"
 
 
+def search_for_private_key(drive):
+    for root, dirs, files in os.walk(drive):
+        for file in files:
+            if file.endswith('.enc'):
+                return os.path.join(root, file)
+    return None
+
+
 def create_gui():
     root = tk.Tk()
 
@@ -226,8 +240,28 @@ def create_gui():
                                                                                              pady=10)
 
     def sign_document_gui():
+
+        def usb_monitor(callback):
+
+            global stop_thread
+            drive_list = set()
+            while not stop_thread:
+                drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
+                new_drives = set(drives) - drive_list
+                for drive in new_drives:
+                    if win32file.GetDriveType(drive) == win32file.DRIVE_REMOVABLE:
+                        time.sleep(3)
+                        private_key_path = search_for_private_key(drive)
+                        if private_key_path:
+                            callback(private_key_path)
+                            stop_thread = True
+                drive_list = set(drives)
+                time.sleep(1)
+
         def sign_document_action():
             document_path = document_entry.get()
+            global stop_thread
+            stop_thread = False
             private_key_path = private_key_entry.get()
             pin = pin_entry.get()
 
@@ -258,6 +292,13 @@ def create_gui():
                 private_key_entry.delete(0, tk.END)
                 private_key_entry.insert(0, path)
 
+        def update_private_key_path(private_key_path):
+            global stop_thread
+            stop_thread = True
+            private_key_entry.delete(0, tk.END)
+            private_key_entry.insert(0, private_key_path)
+            messagebox.showinfo("Klucz prywatny znaleziony", f"Klucz prywatny znaleziony: {private_key_path}")
+
         sign_document_window = tk.Toplevel(root)
         sign_document_window.title("Podpisywanie dokumentu")
 
@@ -277,6 +318,9 @@ def create_gui():
 
         tk.Button(sign_document_window, text="Podpisz dokument", command=sign_document_action).grid(row=3, columnspan=3,
                                                                                                     pady=10)
+        global stop_thread
+        stop_thread = False
+        threading.Thread(target=usb_monitor, args=(update_private_key_path,), daemon=True).start()
 
     def verify_signature_gui():
         def verify_signature_action():
@@ -367,7 +411,7 @@ def create_gui():
         rozszerzenie = file_path.split(".")[-2]
         if rozszerzenie == "txt":
             new_path = filedialog.asksaveasfilename(defaultextension=".txt", initialfile="odczytany.txt",
-                                                title="Wybierz lokalizacje do zapisania odszyfrowanego pliku")
+                                                    title="Wybierz lokalizacje do zapisania odszyfrowanego pliku")
             with open(new_path, "w") as f:
                 f.write(dec_text.decode("utf-8"))
             f.close()
